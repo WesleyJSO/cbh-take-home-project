@@ -1,12 +1,5 @@
 import crypto from  "crypto";
 
-const getEventHash = (candidate) => {
-  const data = JSON.stringify(candidate);
-  return crypto.createHash("sha3-512")
-    .update(data)
-    .digest("hex");
-};
-
 const getCandidateAsString = (candidate) => {
   if (typeof candidate === "string") {
     return candidate;
@@ -30,7 +23,7 @@ const deterministicPartitionKey = (event) => {
   }
 
   if (!event.partitionKey) {
-    return getEventHash(event);
+    return getHashedCandidate(JSON.stringify(event));
   }
   
   const candidateString = getCandidateAsString(event.partitionKey);
